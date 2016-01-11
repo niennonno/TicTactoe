@@ -21,6 +21,32 @@ class ViewController: UIViewController {
     
     @IBOutlet var gameOverLabel: UILabel!
     
+    @IBOutlet var replayButton: UIButton!
+    
+    @IBAction func replay(sender: AnyObject) {
+
+        gameState = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        activePlayer = 1
+        gameActive = true
+        
+        gameOverLabel.hidden = true
+        gameOverLabel.center = CGPointMake(gameOverLabel.center.x - 500, gameOverLabel.center.y)
+        
+        replayButton.hidden = true
+        replayButton.center = CGPointMake(replayButton.center.x - 500, replayButton.center.y)
+        
+        var buttonToClear : UIButton
+        
+        for var i = 0 ; i < 9 ; ++i {
+            
+            buttonToClear = view.viewWithTag(i) as! UIButton
+            buttonToClear.setImage(nil, forState: .Normal)
+            
+        }
+
+    }
+    
+    
     @IBAction func buttonPressed(sender: AnyObject) {
         
         if (gameState[sender.tag] == 0 && gameActive) {
@@ -54,17 +80,42 @@ class ViewController: UIViewController {
                         
                     }
                     
-                    gameOverLabel.hidden = false
-                    
-                    UIView.animateWithDuration(0.5, animations: { () -> Void in
-                        
-                        self.gameOverLabel.center = CGPointMake(self.gameOverLabel.center.x + 500, self.gameOverLabel.center.y)
-                    
-                    })
+                   endGame()
                 }
             }
+            if gameActive == true {
+                
+                gameActive = false
             
+                for buttonState in gameState {
+                
+                    if buttonState == 0 {
+                        
+                        gameActive = true
+                    }
+                }
+            
+                if gameActive == false {
+                    gameOverLabel.text = "It's a draw!"
+                    endGame()
+                }
+            }
         }
+    }
+    
+    func endGame() {
+        
+        gameOverLabel.hidden = false
+        replayButton.hidden = false
+        
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            
+            self.gameOverLabel.center = CGPointMake(self.gameOverLabel.center.x + 500, self.gameOverLabel.center.y)
+        })
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            
+            self.replayButton.center = CGPointMake(self.replayButton.center.x + 500, self.replayButton.center.y)
+        })
     }
     
     override func viewDidLoad() {
@@ -72,6 +123,9 @@ class ViewController: UIViewController {
         
         gameOverLabel.hidden = true
         gameOverLabel.center = CGPointMake(gameOverLabel.center.x - 500, gameOverLabel.center.y)
+        
+        replayButton.hidden = true
+        replayButton.center = CGPointMake(replayButton.center.x - 500, replayButton.center.y)
     
     }
 
